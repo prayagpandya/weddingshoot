@@ -30,10 +30,10 @@ const ThemeConfigSchema = new Schema({
     background: { type: String, default: "#edddd3" }
   },
   typography: {
-    heroTitleSize: { type: Number, default: 4 }, // rem
-    heroSubtitleSize: { type: Number, default: 3.75 }, // rem (60px)
-    exploreTitleSize: { type: Number, default: 1.5 }, // rem
-    sectionHeadingSize: { type: Number, default: 2.25 }, // rem
+    heroTitleSize: { type: Number, default: 2.5 }, // rem
+    heroSubtitleSize: { type: Number, default: 1.25 }, // rem
+    exploreTitleSize: { type: Number, default: 1.125 }, // rem
+    sectionHeadingSize: { type: Number, default: 1.75 }, // rem
   },
   socialLinks: {
     facebook: { type: String, default: "" },

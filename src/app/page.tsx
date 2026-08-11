@@ -106,13 +106,13 @@ export default async function HomePage() {
         </div>
         <div className="relative mx-auto w-full max-w-7xl px-6 pb-24 pt-40 md:pb-32">
           <p
-            className="fade-up font-script mt-6 text-bone"
+            className={`fade-up ${config.hero.typography?.subtitleFont || 'font-script'} mt-6 text-bone`}
             style={{ animationDelay: "0.6s", fontSize: "var(--hero-subtitle-size)" }}
           >
             {config.hero.subtitle}
           </p>
           <h1
-            className="fade-up h-display mt-2 max-w-5xl text-bone"
+            className={`fade-up ${config.hero.typography?.titleFont || 'h-display'} mt-2 max-w-5xl text-bone`}
             style={{ animationDelay: "0.8s", fontSize: "var(--hero-title-size)", lineHeight: "1.1" }}
           >
             {config.hero.title} <span className="font-sans text-white  font-bold text-[0.9em] inline-block -translate-y-1 uppercase">{config.hero.titleHighlight}</span>
@@ -132,7 +132,7 @@ export default async function HomePage() {
             </Link>
           </div>
         </div>
-        <div className="absolute bottom-8 right-8 hidden text-[0.6rem] uppercase tracking-[0.4em] text-bone/50 md:block">
+        <div className={`absolute bottom-8 right-8 ${config.hero.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.4rem] md:text-[0.6rem]'} text-[0.6rem] uppercase tracking-[0.4em] text-bone/50 ${config.hero.typography?.eyebrowFont || 'font-sans'}`}>
           Since 2016
         </div>
       </section>
@@ -148,13 +148,15 @@ export default async function HomePage() {
           }}
         >
           <Reveal>
-            <p className="eyebrow mb-12 text-center" style={{ color: config.explore?.textColor || undefined }}>Explore Our World</p>
+            <p className={`eyebrow mb-12 text-center ${config.explore.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-xs md:text-sm'} ${config.explore.typography?.eyebrowFont || ''}`} style={{ color: config.explore?.textColor || undefined }}>Explore Our World</p>
           {exploreItems.length > 0 ? (
             <ExploreCards
               items={exploreItems}
               layout={config.explore.layout}
               cardShape={config.explore.cardShape}
               spacing={config.explore.spacing}
+              hideEyebrowTextOnMobile={config.explore.hideEyebrowTextOnMobile}
+              titleFont={config.explore.titleFont}
             />
           ) : (
             <p className="text-center text-ink/50 text-sm">No explore items configured yet.</p>
@@ -232,6 +234,7 @@ export default async function HomePage() {
           script=""
           title=""
           center
+          typography={config.stories?.typography}
         />
         <div className="mt-16">
           <SwipeableStories items={portfolio.slice(0, 5)} />

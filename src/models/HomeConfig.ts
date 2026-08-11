@@ -7,6 +7,12 @@ export interface IHomeConfig extends Document<string> {
     title: string;
     titleHighlight: string;
     imageIds: string[];
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -22,21 +28,45 @@ export interface IHomeConfig extends Document<string> {
       orientation?: 'vertical' | 'horizontal' | 'auto';
       galleryImageIds?: string[];
     }[];
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
   };
   gallery: {
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
   };
   stories: {
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
   };
   cta: {
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -50,6 +80,12 @@ const HomeConfigSchema = new Schema({
     title: { type: String, default: "Where every celebration becomes" },
     titleHighlight: { type: String, default: "\"Eternal\"" },
     imageIds: [{ type: String }],
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" }, // empty string means inherit theme
     bgColor: { type: String, default: "" },
@@ -65,21 +101,45 @@ const HomeConfigSchema = new Schema({
       orientation: { type: String, enum: ["vertical", "horizontal", "auto"], default: "auto" },
       galleryImageIds: [{ type: String }]
     }],
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
   },
   gallery: {
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
   },
   stories: {
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
   },
   cta: {
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },

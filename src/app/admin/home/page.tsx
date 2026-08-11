@@ -2,71 +2,7 @@
 import { useState, useEffect } from "react";
 import { ExploreCards } from "@/components/ui";
 
-function SectionControls({ 
-  title, 
-  configData, 
-  onChange 
-}: { 
-  title: string, 
-  configData: any, 
-  onChange: (field: string, val: any) => void 
-}) {
-  return (
-    <div className="bg-black/40 p-4 border border-bone/10 mb-6 flex flex-col md:flex-row gap-6">
-      <div className="flex-1">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input 
-            type="checkbox" 
-            checked={configData.isVisible !== false} 
-            onChange={e => onChange("isVisible", e.target.checked)}
-            className="w-4 h-4 accent-gold"
-          />
-          <span className="text-sm font-bold text-bone">Show {title} Section</span>
-        </label>
-      </div>
-      <div className="flex gap-4 flex-1">
-        <div className="flex-1">
-          <label className="block text-[10px] uppercase tracking-widest text-bone/50 mb-1">Text Color Override</label>
-          <div className="flex items-center gap-2">
-            <input 
-              type="color" 
-              value={configData.textColor || "#000000"} 
-              onChange={e => onChange("textColor", e.target.value)}
-              className="w-6 h-6 rounded cursor-pointer bg-transparent"
-            />
-            <input 
-              type="text" 
-              placeholder="inherit"
-              value={configData.textColor || ""} 
-              onChange={e => onChange("textColor", e.target.value)}
-              className="flex-1 bg-transparent border-b border-bone/20 text-bone text-xs py-1 outline-none"
-            />
-          </div>
-        </div>
-        <div className="flex-1">
-          <label className="block text-[10px] uppercase tracking-widest text-bone/50 mb-1">Background Color Override</label>
-          <div className="flex items-center gap-2">
-            <input 
-              type="color" 
-              value={configData.bgColor || "#000000"} 
-              onChange={e => onChange("bgColor", e.target.value)}
-              className="w-6 h-6 rounded cursor-pointer bg-transparent"
-            />
-            <input 
-              type="text" 
-              placeholder="inherit"
-              value={configData.bgColor || ""} 
-              onChange={e => onChange("bgColor", e.target.value)}
-              className="flex-1 bg-transparent border-b border-bone/20 text-bone text-xs py-1 outline-none"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
+import SectionControls from "@/components/admin/SectionControls";
 export default function HomeConfigPage() {
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -460,6 +396,8 @@ export default function HomeConfigPage() {
               layout={config.explore.layout}
               cardShape={config.explore.cardShape}
               spacing={config.explore.spacing}
+              hideEyebrowTextOnMobile={config.explore.typography?.hideEyebrowOnMobile}
+              titleFont={config.explore.typography?.titleFont}
             />
           ) : (
             <p className="text-center text-ink/50 text-sm">Add items to see preview</p>

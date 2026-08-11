@@ -7,6 +7,12 @@ export interface IOurStoryConfig extends Document<string> {
     eyebrow: string;
     scriptTitle: string;
     title: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -18,6 +24,12 @@ export interface IOurStoryConfig extends Document<string> {
       detail: string;
       imageId: string;
     }[];
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -27,6 +39,12 @@ export interface IOurStoryConfig extends Document<string> {
     title: string;
     buttonLabel: string;
     buttonLink: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -40,6 +58,12 @@ const OurStoryConfigSchema = new Schema({
     eyebrow: { type: String, default: "Our Story" },
     scriptTitle: { type: String, default: "since 2016" },
     title: { type: String, default: "Every love story deserves a storyteller" },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -55,6 +79,12 @@ const OurStoryConfigSchema = new Schema({
         { year: "Today", title: "Destinations without limits", detail: "From Udaipur's palaces to Goa's shores and beyond India's borders — 450+ celebrations later.", imageId: "" },
       ]
     },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -64,6 +94,12 @@ const OurStoryConfigSchema = new Schema({
     title: { type: String, default: "Perhaps it begins with you" },
     buttonLabel: { type: String, default: "Write It With Us" },
     buttonLink: { type: String, default: "/contact" },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },

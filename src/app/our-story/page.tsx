@@ -86,11 +86,11 @@ export default async function OurStoryPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/40" />
           </div>
           <div className="relative mx-auto w-full max-w-7xl px-6 pb-20 pt-44">
-            <p className="fade-up eyebrow" style={{ color: config.hero?.textColor || undefined }}>{config.hero?.eyebrow}</p>
-            <p className="fade-up font-script mt-5 text-4xl text-gold" style={{ animationDelay: "0.15s" }}>
+            <p className={`fade-up eyebrow ${config.hero?.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.6rem] md:text-xs'} ${config.hero?.typography?.eyebrowFont || ''}`} style={{ color: config.hero?.textColor || undefined }}>{config.hero?.eyebrow}</p>
+            <p className={`fade-up mt-5 text-4xl text-gold ${config.hero?.typography?.subtitleFont || 'font-script'}`} style={{ animationDelay: "0.15s" }}>
               {config.hero?.scriptTitle}
             </p>
-            <h1 className="fade-up h-display mt-2 max-w-4xl text-4xl text-bone md:text-7xl" style={{ animationDelay: "0.3s", color: config.hero?.textColor || undefined }}>
+            <h1 className={`fade-up mt-2 max-w-4xl text-4xl text-bone md:text-7xl ${config.hero?.typography?.titleFont || 'h-display'}`} style={{ animationDelay: "0.3s", color: config.hero?.textColor || undefined }}>
               {config.hero?.title}
             </h1>
           </div>
@@ -120,10 +120,10 @@ export default async function OurStoryPage() {
                     />
                   </div>
                   <div>
-                    <p className="font-script text-4xl text-gold">{c.year}</p>
-                    <h2 className="h-display mt-3 text-3xl md:text-4xl" style={{ color: config.timeline?.textColor || undefined }}>{c.title}</h2>
+                    <p className={`text-4xl text-gold ${config.timeline?.typography?.subtitleFont || 'font-script'}`}>{c.year}</p>
+                    <h2 className={`mt-3 text-3xl md:text-4xl ${config.timeline?.typography?.titleFont || 'h-display'}`} style={{ color: config.timeline?.textColor || undefined }}>{c.title}</h2>
                     <div className="gold-rule mt-5" />
-                    <p className="mt-6 leading-relaxed text-ink/70" style={{ color: config.timeline?.textColor ? 'inherit' : undefined }}>{c.detail}</p>
+                    <p className={`mt-6 leading-relaxed text-ink/70 ${config.timeline?.typography?.subtitleFont || ''}`} style={{ color: config.timeline?.textColor ? 'inherit' : undefined }}>{c.detail}</p>
                   </div>
                 </div>
               </Reveal>
@@ -142,6 +142,7 @@ export default async function OurStoryPage() {
               eyebrow={config.cta?.eyebrow}
               title={config.cta?.title}
               center
+              typography={config.cta?.typography}
             />
             <div className="mt-10 flex justify-center">
               <GoldLink href={config.cta?.buttonLink || "#"}>{config.cta?.buttonLabel}</GoldLink>

@@ -80,11 +80,11 @@ export default async function AboutPage() {
           style={{ backgroundColor: config.hero?.bgColor || undefined, color: config.hero?.textColor || undefined }}
         >
           <div className="mx-auto max-w-7xl px-6">
-            <p className="fade-up eyebrow" style={{ color: config.hero?.textColor || undefined }}>{config.hero?.eyebrow}</p>
-            <p className="fade-up font-script mt-5 text-4xl text-gold" style={{ animationDelay: "0.15s" }}>
+            <p className={`fade-up eyebrow ${config.hero?.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.6rem] md:text-xs'} ${config.hero?.typography?.eyebrowFont || ''}`} style={{ color: config.hero?.textColor || undefined }}>{config.hero?.eyebrow}</p>
+            <p className={`fade-up mt-5 text-4xl text-gold ${config.hero?.typography?.subtitleFont || 'font-script'}`} style={{ animationDelay: "0.15s" }}>
               {config.hero?.scriptTitle}
             </p>
-            <h1 className="fade-up h-display mt-2 max-w-4xl text-4xl md:text-7xl" style={{ animationDelay: "0.3s" }}>
+            <h1 className={`fade-up mt-2 max-w-4xl text-4xl md:text-7xl ${config.hero?.typography?.titleFont || 'h-display'}`} style={{ animationDelay: "0.3s" }}>
               {config.hero?.title}
             </h1>
           </div>
@@ -110,14 +110,15 @@ export default async function AboutPage() {
                 eyebrow={config.founder?.eyebrow}
                 script={config.founder?.scriptTitle}
                 title={config.founder?.title}
+                typography={config.founder?.typography}
               />
               <Reveal delay={150}>
-                <ul className="mt-8 space-y-3 text-sm uppercase tracking-[0.25em] text-ink/60" style={{ color: config.founder?.textColor ? 'inherit' : undefined }}>
+                <ul className={`mt-8 space-y-3 text-sm uppercase tracking-[0.25em] text-ink/60 ${config.founder?.typography?.subtitleFont || ''}`} style={{ color: config.founder?.textColor ? 'inherit' : undefined }}>
                   {config.founder?.bullets?.map((b: string, i: number) => (
                     <li key={i}>{b}</li>
                   ))}
                 </ul>
-                <p className="mt-8 leading-relaxed text-ink/70" style={{ color: config.founder?.textColor ? 'inherit' : undefined }}>
+                <p className={`mt-8 leading-relaxed text-ink/70 ${config.founder?.typography?.subtitleFont || ''}`} style={{ color: config.founder?.textColor ? 'inherit' : undefined }}>
                   {config.founder?.content}
                 </p>
                 <div className="mt-10">
@@ -137,8 +138,8 @@ export default async function AboutPage() {
           <div className="mx-auto grid max-w-7xl grid-cols-2 gap-10 px-6 text-center md:grid-cols-4">
             {config.stats?.items?.map((s: any, i: number) => (
               <Reveal key={s.label} delay={i * 100}>
-                <p className="h-display text-5xl text-gold-deep md:text-6xl">{s.n}</p>
-                <p className="mt-2 text-[0.62rem] uppercase tracking-[0.3em] text-ink/60" style={{ color: config.stats?.textColor ? 'inherit' : undefined }}>
+                <p className={`text-5xl text-gold-deep md:text-6xl ${config.stats?.typography?.titleFont || 'h-display'}`}>{s.n}</p>
+                <p className={`mt-2 text-[0.62rem] uppercase tracking-[0.3em] text-ink/60 ${config.stats?.typography?.eyebrowFont || ''}`} style={{ color: config.stats?.textColor ? 'inherit' : undefined }}>
                   {s.label}
                 </p>
               </Reveal>
@@ -152,26 +153,26 @@ export default async function AboutPage() {
           className="mx-auto max-w-7xl px-6 py-24 md:py-32"
           style={{ backgroundColor: config.philosophy?.bgColor || undefined, color: config.philosophy?.textColor || undefined }}
         >
-          <SectionHeading eyebrow={config.philosophy?.eyebrow} title={config.philosophy?.title} center />
+          <SectionHeading eyebrow={config.philosophy?.eyebrow} title={config.philosophy?.title} center typography={config.philosophy?.typography} />
           <div className="mt-16 grid gap-8 md:grid-cols-3">
             {config.philosophy?.values?.map((v: any, i: number) => (
               <Reveal key={v.title} delay={i * 120}>
                 <div className="h-full border border-ink/10 bg-white/60 p-10 text-center backdrop-blur-sm shadow-sm" style={{ backgroundColor: config.philosophy?.bgColor ? 'transparent' : undefined }}>
-                  <p className="font-script text-3xl text-gold">{String(i + 1).padStart(2, "0")}</p>
-                  <h3 className="h-display mt-4 text-2xl">{v.title}</h3>
-                  <p className="mt-4 text-sm leading-relaxed text-ink/60" style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>{v.detail}</p>
+                  <p className={`text-3xl text-gold ${config.philosophy?.typography?.subtitleFont || 'font-script'}`}>{String(i + 1).padStart(2, "0")}</p>
+                  <h3 className={`mt-4 text-2xl ${config.philosophy?.typography?.titleFont || 'h-display'}`}>{v.title}</h3>
+                  <p className={`mt-4 text-sm leading-relaxed text-ink/60 ${config.philosophy?.typography?.subtitleFont || ''}`} style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>{v.detail}</p>
                 </div>
               </Reveal>
             ))}
           </div>
 
           <Reveal className="mx-auto mt-24 max-w-3xl border-l-2 border-gold pl-8">
-            <p className="eyebrow" style={{ color: config.philosophy?.textColor || undefined }}>Mission</p>
-            <p className="font-serif mt-3 text-2xl leading-relaxed text-ink/80" style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>
+            <p className={`eyebrow ${config.philosophy?.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.6rem] md:text-xs'} ${config.philosophy?.typography?.eyebrowFont || ''}`} style={{ color: config.philosophy?.textColor || undefined }}>Mission</p>
+            <p className={`mt-3 text-2xl leading-relaxed text-ink/80 ${config.philosophy?.typography?.subtitleFont || 'font-serif'}`} style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>
               {config.philosophy?.mission}
             </p>
-            <p className="eyebrow mt-10" style={{ color: config.philosophy?.textColor || undefined }}>Vision</p>
-            <p className="font-serif mt-3 text-2xl leading-relaxed text-ink/80" style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>
+            <p className={`eyebrow mt-10 ${config.philosophy?.typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.6rem] md:text-xs'} ${config.philosophy?.typography?.eyebrowFont || ''}`} style={{ color: config.philosophy?.textColor || undefined }}>Vision</p>
+            <p className={`mt-3 text-2xl leading-relaxed text-ink/80 ${config.philosophy?.typography?.subtitleFont || 'font-serif'}`} style={{ color: config.philosophy?.textColor ? 'inherit' : undefined }}>
               {config.philosophy?.vision}
             </p>
           </Reveal>
@@ -190,6 +191,7 @@ export default async function AboutPage() {
               script="blessed couples"
               title="TEB Family Stories"
               center
+              typography={config.testimonials?.typography}
             />
             <div className="mt-16 grid gap-8 md:grid-cols-3">
               {fallbackTestimonials.map((t, i) => (
@@ -198,12 +200,12 @@ export default async function AboutPage() {
                     <div className="flex items-center gap-1 text-gold text-sm">
                       {"★".repeat(t.rating ?? 5)}
                     </div>
-                    <blockquote className="font-serif mt-6 flex-1 text-lg leading-relaxed text-ink/80 italic" style={{ color: config.testimonials?.textColor ? 'inherit' : undefined }}>
+                    <blockquote className={`mt-6 flex-1 text-lg leading-relaxed text-ink/80 italic ${config.testimonials?.typography?.subtitleFont || 'font-serif'}`} style={{ color: config.testimonials?.textColor ? 'inherit' : undefined }}>
                       “{t.quote}”
                     </blockquote>
                     <figcaption className="mt-8 pt-6 border-t border-ink/10">
-                      <p className="h-display text-xl text-ink font-serif" style={{ color: config.testimonials?.textColor ? 'inherit' : undefined }}>{t.couple}</p>
-                      <p className="mt-1 text-[0.62rem] uppercase tracking-[0.3em] text-gold-deep font-sans">
+                      <p className={`text-xl text-ink ${config.testimonials?.typography?.titleFont || 'h-display'}`} style={{ color: config.testimonials?.textColor ? 'inherit' : undefined }}>{t.couple}</p>
+                      <p className={`mt-1 text-[0.62rem] uppercase tracking-[0.3em] text-gold-deep ${config.testimonials?.typography?.eyebrowFont || 'font-sans'}`}>
                         {t.event} · {t.location}
                       </p>
                     </figcaption>
@@ -233,7 +235,7 @@ export default async function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/80 to-ink/90" />
           </div>
           <Reveal className="relative z-10 mx-auto max-w-2xl px-6">
-            <h2 className="h-display text-3xl md:text-5xl">
+            <h2 className={`text-3xl md:text-5xl ${config.cta?.typography?.titleFont || 'h-display'}`}>
               {config.cta?.title}
             </h2>
             <div className="mt-8 flex justify-center">

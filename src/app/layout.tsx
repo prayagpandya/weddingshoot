@@ -56,13 +56,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         background: "#edddd3",
       },
       typography: {
-        heroTitleSize: 4,
-        heroSubtitleSize: 3.75,
-        exploreTitleSize: 1.5,
-        sectionHeadingSize: 2.25,
+        heroTitleSize: 2.5,
+        heroSubtitleSize: 1.25,
+        exploreTitleSize: 1.125,
+        sectionHeadingSize: 1.75,
       }
     };
   }
+
+  const getResponsiveFontSize = (val: number) => {
+    return `clamp(${val * 0.5}rem, ${val}vw + 1rem, ${val}rem)`;
+  };
 
   const customThemeCSS = `
     :root {
@@ -71,10 +75,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       --color-gold: ${themeConfig.colors?.gold || '#c5a880'} !important;
       --color-background: ${themeConfig.colors?.background || '#edddd3'} !important;
       
-      --hero-title-size: ${themeConfig.typography?.heroTitleSize || 4}rem !important;
-      --hero-subtitle-size: ${themeConfig.typography?.heroSubtitleSize || 3.75}rem !important;
-      --explore-title-size: ${themeConfig.typography?.exploreTitleSize || 1.5}rem !important;
-      --section-heading-size: ${themeConfig.typography?.sectionHeadingSize || 2.25}rem !important;
+      --hero-title-size: ${getResponsiveFontSize(themeConfig.typography?.heroTitleSize || 2.5)} !important;
+      --hero-subtitle-size: ${getResponsiveFontSize(themeConfig.typography?.heroSubtitleSize || 1.25)} !important;
+      --explore-title-size: ${getResponsiveFontSize(themeConfig.typography?.exploreTitleSize || 1.125)} !important;
+      --section-heading-size: ${getResponsiveFontSize(themeConfig.typography?.sectionHeadingSize || 1.75)} !important;
     }
     
     body {

@@ -52,22 +52,28 @@ export function SectionHeading({
   script,
   light = false,
   center = false,
+  typography,
 }: {
   eyebrow: string;
   title: string;
   script?: string;
   light?: boolean;
   center?: boolean;
+  typography?: {
+    titleFont?: string;
+    subtitleFont?: string;
+    eyebrowFont?: string;
+    hideEyebrowOnMobile?: boolean;
+  };
 }) {
   return (
     <Reveal className={center ? "text-center" : ""}>
-      <p className="eyebrow">{eyebrow}</p>
+      <p className={`eyebrow ${typography?.hideEyebrowOnMobile !== false ? 'hidden md:block' : 'block text-[0.6rem] md:text-xs'} ${typography?.eyebrowFont || ''}`}>{eyebrow}</p>
       {script && (
-        <p className="font-script text-3xl text-gold mt-4 md:text-4xl">{script}</p>
+        <p className={`text-3xl text-gold mt-4 md:text-4xl ${typography?.subtitleFont || 'font-script'}`}>{script}</p>
       )}
       <h2
-        className={`h-display mt-3 ${light ? "text-bone" : "text-ink"
-          }`}
+        className={`mt-3 ${light ? "text-bone" : "text-ink"} ${typography?.titleFont || 'h-display'}`}
         style={{ fontSize: "var(--section-heading-size)" }}
       >
         {title}
@@ -129,10 +135,14 @@ function ExploreCard({
   h,
   cardShape,
   layout,
+  hideEyebrowTextOnMobile,
+  titleFont,
 }: {
   h: { label: string; image: string; href: string; orientation?: "vertical" | "horizontal" | "auto" };
   cardShape: "portrait" | "square" | "landscape" | "circle";
   layout: "carousel" | "grid";
+  hideEyebrowTextOnMobile?: boolean;
+  titleFont?: string;
 }) {
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">(
     h.orientation === "horizontal"
@@ -189,13 +199,13 @@ function ExploreCard({
         loading="lazy"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
-      <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
-        <span className="block text-xs uppercase tracking-[0.3em] text-bone mb-2 opacity-80 transition-opacity duration-500 group-hover:opacity-100">
+      <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 pointer-events-none">
+        <span className={`${hideEyebrowTextOnMobile !== false ? "hidden md:block" : "block text-[0.6rem]"} md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] text-bone mb-1 md:mb-2 opacity-80 transition-opacity duration-500 group-hover:opacity-100`}>
           Explore
         </span>
         <span 
-          className="block h-display text-bone transition-transform duration-500 group-hover:translate-x-1"
-          style={{ fontSize: "var(--explore-title-size)" }}
+          className={`block ${titleFont || 'h-display'} text-bone transition-transform duration-500 group-hover:translate-x-1`}
+          style={{ fontSize: "var(--explore-title-size)", lineHeight: "1.1" }}
         >
           {h.label}
         </span>
@@ -210,11 +220,15 @@ export function ExploreCards({
   layout = "carousel",
   cardShape = "portrait",
   spacing = "medium",
+  hideEyebrowTextOnMobile,
+  titleFont,
 }: {
   items: { label: string; image: string; href: string; orientation?: "vertical" | "horizontal" | "auto" }[];
   layout?: "carousel" | "grid";
   cardShape?: "portrait" | "square" | "landscape" | "circle";
   spacing?: "small" | "medium" | "large";
+  hideEyebrowTextOnMobile?: boolean;
+  titleFont?: string;
 }) {
   const [emblaRef] = useEmblaCarousel({
     align: "start",
@@ -227,10 +241,10 @@ export function ExploreCards({
 
   if (layout === "grid") {
     return (
-      <div className="w-full px-20">
+      <div className="w-full px-6 md:px-12 lg:px-20">
         <div className={`grid grid-cols-2 md:grid-cols-4 ${gapClass}`}>
           {items.map((h) => (
-            <ExploreCard key={h.label} h={h} cardShape={cardShape} layout={layout} />
+            <ExploreCard key={h.label} h={h} cardShape={cardShape} layout={layout} hideEyebrowTextOnMobile={hideEyebrowTextOnMobile} titleFont={titleFont} />
           ))}
         </div>
       </div>
@@ -238,10 +252,10 @@ export function ExploreCards({
   }
 
   return (
-    <div className="overflow-hidden w-full px-48" ref={emblaRef}>
+    <div className="overflow-hidden w-full px-6 md:px-12 lg:px-20" ref={emblaRef}>
       <div className={`flex ${gapClass} touch-pan-y cursor-grab active:cursor-grabbing`}>
         {items.map((h) => (
-          <ExploreCard key={h.label} h={h} cardShape={cardShape} layout={layout} />
+          <ExploreCard key={h.label} h={h} cardShape={cardShape} layout={layout} hideEyebrowTextOnMobile={hideEyebrowTextOnMobile} titleFont={titleFont} />
         ))}
       </div>
     </div>

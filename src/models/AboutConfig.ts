@@ -6,6 +6,12 @@ export interface IAboutConfig extends Document<string> {
     eyebrow: string;
     scriptTitle: string;
     title: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -19,12 +25,24 @@ export interface IAboutConfig extends Document<string> {
     content: string;
     buttonLabel: string;
     buttonLink: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
   };
   stats: {
     items: { n: string; label: string }[];
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -35,11 +53,23 @@ export interface IAboutConfig extends Document<string> {
     values: { title: string; detail: string }[];
     mission: string;
     vision: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
   };
   testimonials: {
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -49,6 +79,12 @@ export interface IAboutConfig extends Document<string> {
     title: string;
     buttonLabel: string;
     buttonLink: string;
+    typography?: {
+      titleFont?: 'h-display' | 'font-sans' | 'font-script';
+      subtitleFont?: 'h-display' | 'font-sans' | 'font-script';
+      eyebrowFont?: 'h-display' | 'font-sans' | 'font-script';
+      hideEyebrowOnMobile?: boolean;
+    };
     isVisible: boolean;
     textColor: string;
     bgColor: string;
@@ -61,6 +97,12 @@ const AboutConfigSchema = new Schema({
     eyebrow: { type: String, default: "About The Eternal Bliss" },
     scriptTitle: { type: String, default: "more than photography" },
     title: { type: String, default: "A complete luxury wedding experience house" },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -79,6 +121,12 @@ const AboutConfigSchema = new Schema({
     content: { type: String, default: "Since 2016, Garima has led The Eternal Bliss with a singular philosophy: curate emotions, preserve memories, and transform celebrations into timeless experiences. Under her direction, a photography studio grew into one of India's most complete wedding experience houses — planning, decor, films, invitations, entertainment and fine-art photography under one roof." },
     buttonLabel: { type: String, default: "Read Our Story" },
     buttonLink: { type: String, default: "/our-story" },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -90,6 +138,12 @@ const AboutConfigSchema = new Schema({
       { n: "30+", label: "Destinations" },
       { n: "1", label: "Promise: Perfection" }
     ]},
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -104,11 +158,23 @@ const AboutConfigSchema = new Schema({
     ]},
     mission: { type: String, default: "Deliver complete wedding experiences through planning, storytelling, photography, decor, films and flawless execution." },
     vision: { type: String, default: "Become one of India's leading luxury wedding experience companies." },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
   },
   testimonials: {
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
@@ -118,6 +184,12 @@ const AboutConfigSchema = new Schema({
     title: { type: String, default: "Come, be part of our story" },
     buttonLabel: { type: String, default: "Start a Conversation" },
     buttonLink: { type: String, default: "/contact" },
+    typography: {
+      titleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      subtitleFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      eyebrowFont: { type: String, enum: ["h-display", "font-sans", "font-script"] },
+      hideEyebrowOnMobile: { type: Boolean },
+    },
     isVisible: { type: Boolean, default: true },
     textColor: { type: String, default: "" },
     bgColor: { type: String, default: "" },
