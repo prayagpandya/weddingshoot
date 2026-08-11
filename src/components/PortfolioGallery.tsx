@@ -9,7 +9,14 @@ interface PortfolioItem {
   place: string;
   tag: string;
   imageId: string;
+  galleryImageIds?: string[];
   orientation?: 'vertical' | 'horizontal' | 'auto';
+}
+
+interface ActiveAlbumState {
+  item: PortfolioItem;
+  imageIds: string[];
+  currentIndex: number;
 }
 
 /* ---------- Single portfolio card — extracted to fix Rules of Hooks ---------- */
@@ -84,7 +91,7 @@ function PortfolioCard({
 }
 
 export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [activeAlbum, setActiveAlbum] = useState<ActiveAlbumState | null>(null);
   const [rotation, setRotation] = useState<number>(0);
   const [zoom, setZoom] = useState<number>(1);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -108,26 +115,40 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
   };
 
   const openLightbox = (index: number) => {
-    setSelectedIndex(index);
+    const item = filteredItems[index];
+    // Include cover image if they just want that, otherwise load the gallery
+    const imageIds = item.galleryImageIds && item.galleryImageIds.length > 0 
+      ? item.galleryImageIds 
+      : [item.imageId];
+      
+    setActiveAlbum({ item, imageIds, currentIndex: 0 });
     resetTransform();
   };
 
   const closeLightbox = () => {
-    setSelectedIndex(null);
+    setActiveAlbum(null);
     resetTransform();
   };
 
   const handlePrev = useCallback(() => {
-    if (selectedIndex === null) return;
+    if (!activeAlbum) return;
     resetTransform();
-    setSelectedIndex((prev) => (prev === 0 ? filteredItems.length - 1 : (prev as number) - 1));
-  }, [selectedIndex, filteredItems.length]);
+    setActiveAlbum((prev) => {
+      if (!prev) return null;
+      const newIndex = prev.currentIndex === 0 ? prev.imageIds.length - 1 : prev.currentIndex - 1;
+      return { ...prev, currentIndex: newIndex };
+    });
+  }, [activeAlbum]);
 
   const handleNext = useCallback(() => {
-    if (selectedIndex === null) return;
+    if (!activeAlbum) return;
     resetTransform();
-    setSelectedIndex((prev) => (prev === filteredItems.length - 1 ? 0 : (prev as number) + 1));
-  }, [selectedIndex, filteredItems.length]);
+    setActiveAlbum((prev) => {
+      if (!prev) return null;
+      const newIndex = prev.currentIndex === prev.imageIds.length - 1 ? 0 : prev.currentIndex + 1;
+      return { ...prev, currentIndex: newIndex };
+    });
+  }, [activeAlbum]);
 
   const rotateLeft = () => {
     setRotation((r) => (r - 90) % 360);
@@ -189,7 +210,7 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
 
   // Keyboard navigation & shortcuts
   useEffect(() => {
-    if (selectedIndex === null) return;
+    if (!activeAlbum) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeLightbox();
@@ -211,9 +232,10 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedIndex, handlePrev, handleNext]);
+  }, [activeAlbum, handlePrev, handleNext]);
 
-  const activeItem = selectedIndex !== null ? filteredItems[selectedIndex] : null;
+  const activeItem = activeAlbum?.item || null;
+  const activeImageId = activeAlbum ? activeAlbum.imageIds[activeAlbum.currentIndex] : null;
 
   return (
     <>
@@ -225,7 +247,7 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
               key={cat}
               onClick={() => {
                 setActiveCategory(cat);
-                setSelectedIndex(null);
+                setActiveAlbum(null);
               }}
               className={`px-5 py-2 text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-300 ${
                 activeCategory === cat
@@ -251,7 +273,7 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
       )}
 
       {/* Interactive Lightbox Modal */}
-      {activeItem && selectedIndex !== null && (
+      {activeItem && activeAlbum && activeImageId && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md transition-opacity duration-300 select-none"
           onClick={closeLightbox}
@@ -264,7 +286,7 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-bone/80 text-[0.7rem] uppercase tracking-[0.3em]">
-              {selectedIndex + 1} / {filteredItems.length}
+              {activeAlbum.currentIndex + 1} / {activeAlbum.imageIds.length}
             </div>
 
             {/* Controls: Zoom, Rotate & Close */}
@@ -370,7 +392,7 @@ export default function PortfolioGallery({ items }: { items: PortfolioItem[] }) 
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imageRef}
-              src={`/api/images/${activeItem.imageId}`}
+              src={`/api/images/${activeImageId}`}
               alt={activeItem.title}
               style={{
                 transform: `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg) scale(${zoom})`,

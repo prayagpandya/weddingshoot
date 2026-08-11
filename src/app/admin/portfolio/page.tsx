@@ -8,7 +8,9 @@ interface PortfolioItem {
   title: string;
   place: string;
   tag: string;
+  categoryId: any;
   imageId: string;
+  galleryImageIds?: string[];
   orientation?: Orientation;
 }
 
@@ -26,9 +28,14 @@ export default function PortfolioPage() {
   const [place, setPlace] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [galleryImages, setGalleryImages] = useState<FileList | null>(null);
   const [orientation, setOrientation] = useState<Orientation>("auto");
   const [loading, setLoading] = useState(false);
   const [savingId, setSavingId] = useState<string | null>(null);
+
+  const [editModeId, setEditModeId] = useState<string | null>(null);
+  const [existingGalleryIds, setExistingGalleryIds] = useState<string[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
 
   const fetchData = async () => {
     const [resItems, resCats] = await Promise.all([
@@ -45,9 +52,33 @@ export default function PortfolioPage() {
 
   useEffect(() => { fetchData(); }, []);
 
+  const handleEdit = (item: PortfolioItem) => {
+    setEditModeId(item._id);
+    setTitle(item.title);
+    setPlace(item.place);
+    setCategoryId(item.categoryId?._id || item.categoryId || "");
+    setOrientation(item.orientation || "auto");
+    setExistingGalleryIds(item.galleryImageIds || []);
+    setDeletedImageIds([]);
+    setImage(null);
+    setGalleryImages(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditModeId(null);
+    setTitle("");
+    setPlace("");
+    setOrientation("auto");
+    setExistingGalleryIds([]);
+    setDeletedImageIds([]);
+    setImage(null);
+    setGalleryImages(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image) return alert("Image is required");
+    if (!editModeId && !image) return alert("Image is required");
     setLoading(true);
 
     const formData = new FormData();
@@ -55,11 +86,22 @@ export default function PortfolioPage() {
     formData.append("place", place);
     formData.append("categoryId", categoryId);
     formData.append("orientation", orientation);
-    formData.append("image", image);
+    if (image) formData.append("image", image);
+    
+    if (galleryImages) {
+      for (let i = 0; i < galleryImages.length; i++) {
+        formData.append("galleryImages", galleryImages[i]);
+      }
+    }
 
-    await fetch("/api/admin/portfolio", { method: "POST", body: formData });
+    if (editModeId) {
+      formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
+      await fetch(`/api/admin/portfolio/${editModeId}`, { method: "PUT", body: formData });
+    } else {
+      await fetch("/api/admin/portfolio", { method: "POST", body: formData });
+    }
 
-    setTitle(""); setPlace(""); setImage(null); setOrientation("auto");
+    cancelEdit();
     setLoading(false);
     fetchData();
   };
@@ -91,7 +133,7 @@ export default function PortfolioPage() {
         <h1 className="text-3xl h-display mb-8">Manage Portfolio</h1>
 
         <form onSubmit={handleSubmit} className="bg-zinc-900 p-6 border border-bone/10 space-y-4 max-w-2xl">
-          <h2 className="text-xl h-display">Upload Image</h2>
+          <h2 className="text-xl h-display">{editModeId ? "Edit Album" : "Upload Image"}</h2>
           <div className="grid gap-4">
             <div>
               <label className="block text-xs uppercase tracking-widest text-bone mb-2">Title</label>
@@ -137,15 +179,51 @@ export default function PortfolioPage() {
             </div>
 
             <div>
-              <label className="block text-xs uppercase tracking-widest text-bone mb-2">Image</label>
-              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} required
+              <label className="block text-xs uppercase tracking-widest text-bone mb-2">Cover Image {editModeId && "(Optional - Leave blank to keep current)"}</label>
+              <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} required={!editModeId}
                 className="w-full bg-black/50 border border-bone/20 p-2 text-bone" />
             </div>
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-bone mb-2">Album Gallery Images (Optional)</label>
+              
+              {editModeId && existingGalleryIds.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] text-bone/50 mb-2">Existing Photos (click X to remove)</p>
+                  <div className="flex flex-wrap gap-2">
+                    {existingGalleryIds.map(gid => {
+                      const isDeleted = deletedImageIds.includes(gid);
+                      if (isDeleted) return null;
+                      return (
+                        <div key={gid} className="relative w-16 h-16 border border-bone/20 group">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={`/api/images/${gid}`} alt="Gallery thumbnail" className="w-full h-full object-cover" />
+                          <button type="button" onClick={() => setDeletedImageIds(prev => [...prev, gid])} className="absolute top-0 right-0 bg-red-500/90 text-white text-[10px] w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">✕</button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <input type="file" accept="image/*" multiple onChange={(e) => setGalleryImages(e.target.files)}
+                className="w-full bg-black/50 border border-bone/20 p-2 text-bone" />
+              <p className="mt-1.5 text-[10px] text-bone/30">
+                {editModeId ? "Select additional photos to append to this album." : "Select multiple photos to create a swipeable album when this item is clicked."}
+              </p>
+            </div>
           </div>
-          <button type="submit" disabled={loading}
-            className="bg-bone text-ink px-6 py-2 uppercase text-xs tracking-widest hover:bg-bone/80 transition-colors">
-            {loading ? "Uploading..." : "Upload"}
-          </button>
+          <div className="flex gap-4">
+            <button type="submit" disabled={loading}
+              className="bg-bone text-ink px-6 py-2 uppercase text-xs tracking-widest hover:bg-bone/80 transition-colors">
+              {loading ? "Saving..." : (editModeId ? "Save Changes" : "Upload")}
+            </button>
+            {editModeId && (
+              <button type="button" onClick={cancelEdit} disabled={loading}
+                className="border border-bone/30 text-bone px-6 py-2 uppercase text-xs tracking-widest hover:bg-bone/10 transition-colors">
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -165,13 +243,21 @@ export default function PortfolioPage() {
                     alt={item.title}
                     className="w-full h-full object-cover"
                   />
-                  {/* Delete button */}
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="absolute top-2 right-2 bg-red-500/90 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                  >
-                    Delete
-                  </button>
+                  {/* Action buttons */}
+                  <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="bg-ink/90 text-bone border border-bone/30 text-xs px-2 py-1 hover:bg-bone hover:text-ink transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="bg-red-500/90 text-white text-xs px-2 py-1 hover:bg-red-600 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
 
                 {/* Info */}

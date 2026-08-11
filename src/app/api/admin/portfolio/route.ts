@@ -23,6 +23,7 @@ export async function POST(request: Request) {
     const place = formData.get("place") as string;
     const categoryId = formData.get("categoryId") as string;
     const image = formData.get("image") as File;
+    const galleryImages = formData.getAll("galleryImages") as File[];
     const orientation = (formData.get("orientation") as string) || "auto";
 
     if (!title || !place || !categoryId || !image) {
@@ -35,22 +36,41 @@ export async function POST(request: Request) {
     const category = await Category.findById(categoryId);
     const tag = category ? category.name : "Uncategorized";
 
-    // Convert Web File to Node.js Readable stream
-    const arrayBuffer = await image.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const stream = Readable.from(buffer);
+    // Upload Cover Image
+    const coverArrayBuffer = await image.arrayBuffer();
+    const coverBuffer = Buffer.from(coverArrayBuffer);
+    const coverStream = Readable.from(coverBuffer);
 
-    const uploadStream = bucket.openUploadStream(image.name, {
+    const coverUploadStream = bucket.openUploadStream(image.name, {
       contentType: image.type,
     });
-
-    const imageId = uploadStream.id.toString();
+    const imageId = coverUploadStream.id.toString();
 
     await new Promise((resolve, reject) => {
-      stream.pipe(uploadStream)
+      coverStream.pipe(coverUploadStream)
         .on('error', reject)
         .on('finish', resolve);
     });
+
+    // Upload Gallery Images
+    const galleryImageIds: string[] = [];
+    for (const file of galleryImages) {
+      if (file.size === 0) continue; // Skip empty files
+      const fileArrayBuffer = await file.arrayBuffer();
+      const fileBuffer = Buffer.from(fileArrayBuffer);
+      const fileStream = Readable.from(fileBuffer);
+      
+      const fileUploadStream = bucket.openUploadStream(file.name, {
+        contentType: file.type,
+      });
+      galleryImageIds.push(fileUploadStream.id.toString());
+      
+      await new Promise((resolve, reject) => {
+        fileStream.pipe(fileUploadStream)
+          .on('error', reject)
+          .on('finish', resolve);
+      });
+    }
 
     const portfolioItem = await Portfolio.create({
       title,
@@ -58,6 +78,7 @@ export async function POST(request: Request) {
       tag,
       categoryId,
       imageId,
+      galleryImageIds,
       orientation,
     });
 

@@ -5,7 +5,8 @@ export interface IPortfolio extends Document {
   place: string;
   tag: string;
   categoryId: Types.ObjectId;
-  imageId: string;
+  imageId: string; // Cover image
+  galleryImageIds?: string[]; // Album photos
   orientation?: 'vertical' | 'horizontal' | 'auto';
 }
 
@@ -15,6 +16,7 @@ const PortfolioSchema: Schema = new Schema({
   tag: { type: String, required: true }, 
   categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   imageId: { type: String, required: true },
+  galleryImageIds: [{ type: String }],
   orientation: { type: String, enum: ["vertical", "horizontal", "auto"], default: "auto" },
 }, { timestamps: true });
 
