@@ -84,9 +84,30 @@ export default function Nav({ socialLinks }: { socialLinks?: any }) {
             : "bg-transparent"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:py-5">
+        <div className="mx-auto relative flex max-w-7xl items-center justify-between px-6 py-4 md:py-5">
           {/* Left Side */}
-          <div className="flex flex-1 justify-start">
+          <div className="flex flex-1 justify-start items-center">
+            <button
+              onClick={() => setOpen(!open)}
+              aria-label="Menu"
+              className={`flex items-center gap-3 text-[0.68rem] uppercase tracking-[0.3em] lg:hidden ${
+                headerDark ? "text-ink" : "text-bone"
+              }`}
+            >
+              <span className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 border border-current/30 rounded-full">
+                <span
+                  className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                    open ? "translate-y-[3.5px] rotate-45" : ""
+                  }`}
+                />
+                <span
+                  className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                    open ? "-translate-y-[3.5px] -rotate-45" : ""
+                  }`}
+                />
+              </span>
+              <span className="hidden md:inline">{open ? "Close" : "Menu"}</span>
+            </button>
             <nav className="hidden items-center gap-5 xl:gap-8 lg:flex">
               {["/", "/about", "/our-story"].map((href) => {
                 const link = links.find((l) => l.href === href)!;
@@ -161,28 +182,6 @@ export default function Nav({ socialLinks }: { socialLinks?: any }) {
             <div className="hidden lg:flex items-center">
               <SocialIcons className={`${headerDark ? "text-ink/80" : "text-bone/85"}`} />
             </div>
-
-            <button
-              onClick={() => setOpen(!open)}
-              aria-label="Menu"
-              className={`flex items-center gap-3 text-[0.68rem] uppercase tracking-[0.3em] lg:hidden ${
-                headerDark ? "text-ink" : "text-bone"
-              }`}
-            >
-              <span className="hidden md:inline">{open ? "Close" : "Menu"}</span>
-              <span className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 border border-current/30 rounded-full">
-                <span
-                  className={`block h-px w-4 bg-current transition-transform duration-300 ${
-                    open ? "translate-y-[3.5px] rotate-45" : ""
-                  }`}
-                />
-                <span
-                  className={`block h-px w-4 bg-current transition-transform duration-300 ${
-                    open ? "-translate-y-[3.5px] -rotate-45" : ""
-                  }`}
-                />
-              </span>
-            </button>
           </div>
         </div>
       </header>
