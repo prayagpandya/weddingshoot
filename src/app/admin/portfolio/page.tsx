@@ -1,6 +1,51 @@
 "use client";
 import { useState, useEffect } from "react";
 
+// Client-side image compression utility
+const compressImage = (file: File, maxWidth = 1920, quality = 0.8): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(file); // Fallback to original
+
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return resolve(file); // Fallback
+            // Convert Blob to File
+            const compressedFile = new File([blob], file.name, {
+              type: "image/jpeg",
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.onerror = (err) => resolve(file); // Fallback on error
+    };
+    reader.onerror = (err) => resolve(file); // Fallback on error
+  });
+};
+
 type Orientation = "vertical" | "horizontal" | "auto";
 
 interface PortfolioItem {
@@ -86,11 +131,16 @@ export default function PortfolioPage() {
     formData.append("place", place);
     formData.append("categoryId", categoryId);
     formData.append("orientation", orientation);
-    if (image) formData.append("image", image);
+    
+    if (image) {
+      const compressedImage = await compressImage(image);
+      formData.append("image", compressedImage);
+    }
     
     if (galleryImages) {
       for (let i = 0; i < galleryImages.length; i++) {
-        formData.append("galleryImages", galleryImages[i]);
+        const compressedGalleryImage = await compressImage(galleryImages[i]);
+        formData.append("galleryImages", compressedGalleryImage);
       }
     }
 
