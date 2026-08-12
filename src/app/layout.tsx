@@ -98,7 +98,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
         <SmoothScroll>
-          <Nav />
+          <Nav socialLinks={themeConfig.socialLinks} />
           <main className="pb-14 md:pb-0">{children}</main>
           <Footer />
           <WhatsAppButton />
