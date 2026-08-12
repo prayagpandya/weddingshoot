@@ -94,11 +94,19 @@ export default function PortfolioPage() {
       }
     }
 
+    let res;
     if (editModeId) {
       formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
-      await fetch(`/api/admin/portfolio/${editModeId}`, { method: "PUT", body: formData });
+      res = await fetch(`/api/admin/portfolio/${editModeId}`, { method: "PUT", body: formData });
     } else {
-      await fetch("/api/admin/portfolio", { method: "POST", body: formData });
+      res = await fetch("/api/admin/portfolio", { method: "POST", body: formData });
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Failed to upload" }));
+      alert(err.error || "Failed to upload");
+      setLoading(false);
+      return;
     }
 
     cancelEdit();

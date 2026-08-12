@@ -4,6 +4,8 @@ import Portfolio from "@/models/Portfolio";
 import { Readable } from "stream";
 import Category from "@/models/Category"; // ensure model is registered
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     await connectToDatabase();
